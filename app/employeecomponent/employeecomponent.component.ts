@@ -85,6 +85,8 @@ export class EmployeecomponentComponent implements OnInit {
       //In order to apply round border you can use the class rounded.
       M.toast({html : 'Saved Successfully', classes : 'rounded'});
     });
+    //Resetting form after adding employee, in order to add another employee.
+    form.reset();
   }
   else{
     this.employeeService.putEmployee(form.value).subscribe((res) => {
