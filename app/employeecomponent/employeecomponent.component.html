@@ -1,0 +1,116 @@
+<!-- Inside this component we will design a form using the property employee selectedEmployee from employee service -->
+<!-- So first of all we have to inject employee service class inside the employeecomponent component typescript file -->
+<!-- We can now design a form using this employeeserviceService from employeeservice.service.ts selectedEmployee -->
+
+<div class="row">
+  <div class="col s12">
+    <div class="card blue-grey darken-1">
+      <div class="card-content white-text">
+        <div class="row">
+          <div class="col s5">
+            <!-- In this di we will design the employee column -->
+            <form #employeeForm="ngForm" (ngSubmit)="onSubmit(employeeForm)"><!-- This is the local reference employeeForm=ngForm and here we have used the submit using the ngSubmit attribute. It will call this function on submit and we will pass the local reference employeeForm into that function. We will call this onSubmit function. We have to define this onSubmit function into the corresponding typescript file i.e., employeecomponent.component.ts -->
+              <!-- We will decide wheather we want to update or delete based on this input hidden field here i.e., _id. If _id has empty string then we will go for insert operation otherwise we will go for update operation. --> 
+            <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="employeeService.selectedEmployee._id"> <!-- Inside this we will store the objectId of mongodb. #_id="ngModel" is the local reference. Two way data binding [(ngModel)]="employeeService.selectedEmployee._id". employeeService is the injected object of employee service from employeecomponent.component. selectedEmployee from employeecomponent.service.ts class. Inside which we have the property _id from employeeclass.model.ts -->
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" name="empid" #name="ngModel" [(ngModel)]="employeeService.selectedEmployee.empid" placeholder="Enter Employee ID" required>
+                <label>Employee Id :
+                  <label class="red-text">*</label>
+                </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" name="firstname" #name="ngModel" [(ngModel)]="employeeService.selectedEmployee.firstname" placeholder="Enter First Name" required>
+                <label>First Name :</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" name="middlename" #name="ngModel" [(ngModel)]="employeeService.selectedEmployee.middlename" placeholder="Enter Middle Name">
+                <label>Middle Name :</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" name="lastname" #name="ngModel" [(ngModel)]="employeeService.selectedEmployee.lastname" placeholder="Enter Last Name" required>
+                <label>Last Name :</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" name="position" #name="ngModel" [(ngModel)]="employeeService.selectedEmployee.position" placeholder="Enter Position">
+                <label>Position :</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="text" name="office" #name="ngModel" [(ngModel)]="employeeService.selectedEmployee.office" placeholder="Enter Office Location">
+                <label>Office Location :</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <input type="number" name="salary" #name="ngModel" [(ngModel)]="employeeService.selectedEmployee.salary" placeholder="Enter Salary">
+                <label>Salary :</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <!-- Adding click event for reset button. In the function we will pass the local reference employeeForm -->
+                <button class="btn btn-custom right" type="button" (click)="resetForm(employeeForm)">Reset</button>
+                <!-- Disabled attribute will be applied whever this form as a whole is not valid. employeeForm is the local reference for this form here. -->
+                <button class="btn btn-custom right" type="submit" [disabled]="!employeeForm.valid">Submit</button>
+              </div>
+            </div>
+        </form>
+        </div>
+        <div class="col s7">
+          <!-- In this div we will display the list of mongodb collection -->
+          <!-- Adding a table to list employees -->
+          <!-- Inorder to design the table, i will use the employees array from EmployeeserviceService class in employeeservice.service.ts file -->
+          <table class="responsive-table highlight">
+            <thead>
+              <tr>
+                <th>Employee Id: </th>
+                <th>First Name: </th>
+                <th>Middle Name: </th>
+                <th>Last Name: </th>
+                <th>Position: </th>
+                <th>Office: </th>
+                <th>Salary: </th>
+                <!-- Adding empty th tags fo buttons for edit and delete -->
+                <th></th>
+              </tr>
+            </thead>
+            <!-- For showing exact content from employees collection. Using tr element here. *ngFor basically allows us to iterate through the employees array from employeeService class, with this emp variable -->
+            <!-- Here in this employees array from employeeService class from employeecomponent.component.ts we have to fetch all employees records from this employees collection in the MongoDb. For that we can define a new function inside the employeeservice.service.ts file. -->
+            <tr *ngFor="let emp of employeeService.employees">
+              <!-- Using this emp variable we can display data from the employeescollection, in MongoDb. -->
+              <td>{{emp.empid}}</td> <!-- In ordet to display name of string data type we have string interpolation or one directional binding. -->
+              <td>{{emp.firstname}}</td>
+              <td>{{emp.middlename}}</td>
+              <td>{{emp.lastname}}</td>
+              <td>{{emp.position}}</td>
+              <td>{{emp.office}}</td>
+              <td>{{emp.salary}}</td>
+              <!-- Adding buttons -->
+              <td>
+                <!-- When we clisk on this edit button we will call this function onEdit by passing this emp object from the iteration -->
+                <a class="action-btn" (click)="onEdit(emp)">
+                  <i class="material-icons">edit</i>
+                </a>
+                <!-- We have to pass two parameters, first is the _id for the MongoDb object and then we will pass the form object employee form, because we have to reset after any delete operation. We need to define this function into the employeeclass class file. -->
+                <a class="action-btn" (click)="onDelete(emp._id, employeeForm)">
+                    <i class="material-icons">delete</i>
+                </a>
+              </td>
+            </tr>
+          </table>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
